@@ -1,0 +1,50 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "lh-dns-guardian"
+version = "0.1.0"
+description = "Domain name resolution and DNS security posture validator by Logihertz Systems OPC Pvt Ltd"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [
+    { name = "Logihertz Systems OPC Pvt Ltd" }
+]
+dependencies = [
+    "dnspython>=2.6.0",
+    "typer>=0.9.0",
+    "rich>=13.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-cov>=4.1.0",
+    "ruff>=0.4.0",
+    "bandit>=1.7.0",
+]
+
+[project.scripts]
+lh-dns = "lh_dns_guardian.cli:app"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/lh_dns_guardian"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B"]
+ignore = []
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+[tool.bandit]
+exclude_dirs = ["tests", ".venv"]
+skips = ["B101"]
+
