@@ -1,146 +1,131 @@
 # lh-dns-guardian
 
-A comprehensive domain name resolution and DNS security posture validator by **Logihertz Systems OPC Pvt Ltd**.
+[![CI](https://github.com/Logihertz-Systems-OPC-Pvt-Ltd/lh-dns-guardian/actions/workflows/ci.yml/badge.svg)](https://github.com/Logihertz-Systems-OPC-Pvt-Ltd/lh-dns-guardian/actions/workflows/ci.yml)
+[![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
+[![Code style: ruff](https://img.shields.io/badge/code%20style-ruff-000000.svg)](https://github.com/astral-sh/ruff)
+[![Security: bandit](https://img.shields.io/badge/security-bandit-yellow.svg)](https://github.com/PyCQA/bandit)
+[![License: Apache-2.0](https://img.shields.io/badge/License-Apache--2.0-blue.svg)](LICENSE)
 
-`lh-dns-guardian` audits live domains and BIND master zone files to detect missing DNSSEC, weak or missing SPF and DMARC policies, missing CAA constraints, open AXFR zone transfers, and dangling subdomain takeover vulnerabilities.
+An enterprise dns infrastructure & email auth security developed by **Logihertz Systems (OPC) Private Limited**.
+
+Validates BIND zone files, DNS records, DNSSEC chain integrity, SPF lookup limits, DKIM key strength, DMARC enforcement policies, CAA restrictions, and dangling CNAME subdomain takeover risks.
 
 ---
 
-## Features
+## Key Features
 
-- **DNSSEC Validation**: Verifies published `DNSKEY`, parent `DS` delegation records, and zone `RRSIG` signatures to prevent DNS spoofing and cache poisoning.
-- **Certificate Authority Authorization (CAA)**: Audits CAA records (`issue`, `issuewild`, `iodef`) to ensure only authorized Certificate Authorities can issue TLS certificates for your domains.
-- **Zone Transfer (AXFR) Protection**: Probes authoritative nameservers for unauthenticated full zone transfer misconfigurations that expose internal networks and unpublished subdomains.
-- **SPF Policy Enforcement**: Validates Sender Policy Framework (RFC 7208) for overly permissive mechanisms (`+all`, `?all`), deprecated mechanisms (`ptr`), multiple records, and excessive DNS lookup chains exceeding the 10-lookup limit.
-- **DMARC Compliance**: Audits `_dmarc` policy records (RFC 7489) for un-enforced monitoring policies (`p=none`), insecure subdomain policies (`sp=none`), partial enforcement (`pct < 100`), and missing aggregate reporting (`rua`).
-- **Dangling Subdomain Takeover Detection**: Scans CNAME and NS records against signatures for major cloud providers:
-  - **GitHub Pages** (`*.github.io`)
-  - **Amazon Web Services (AWS) S3** (`*.s3.amazonaws.com`, `*.s3-website*.amazonaws.com`)
-  - **Microsoft Azure** (`*.azurewebsites.net`, `*.cloudapp.net`, `*.trafficmanager.net`)
-  - **Vercel** (`cname.vercel-dns.com`, `*.vercel.app`)
-  - **Heroku** (`*.herokuapp.com`, `*.herokudns.com`)
-  - **Dangling NS Delegations** (AWS Route53, Azure DNS)
-- **Multi-Format Export**: Generates beautiful Rich terminal tables, structured JSON, or standard **OASIS SARIF v2.1.0** reports for integration with CI/CD and security scanners (such as GitHub Code Scanning).
+- **DNSSEC Cryptographic Chain Validation**: Verifies `DNSKEY`, parent `DS` delegation records, and zone `RRSIG` signatures.
+- **Certificate Authority Authorization (CAA)**: Audits CAA records (`issue`, `issuewild`, `iodef`) to ensure authorized CA issuance.
+- **AXFR Zone Transfer Protection**: Probes authoritative nameservers for unauthenticated full zone transfer misconfigurations.
+- **SPF & DMARC Enforcement**: Evaluates Sender Policy Framework rules for `+all` risks and verifies strict DMARC quarantine/reject policies.
+- **Subdomain Takeover Detection**: Checks CNAME and NS records against cloud provider fingerprints (AWS S3, GitHub Pages, Azure, Vercel).
+- **Multi-Format Reporting**: Outputs rich terminal tables, machine-readable JSON, and OASIS SARIF v2.1.0.
+
+---
+
+## Core Detection Rules
+
+| Rule ID | Severity | Description |
+|:---|:---:|:---|
+| `LH-SEC-001` | `CRITICAL` | DNSSEC is not enabled or published on target domain (missing DNSKEY/DS/RRSIG) |
+| `LH-SEC-002` | `HIGH` | Incomplete DNSSEC chain (keys present without DS delegation or valid RRSIG) |
+| `LH-CAA-001` | `HIGH` | Missing CAA records (any public CA may issue certificates for domain) |
+| `LH-AXFR-001` | `CRITICAL` | Open AXFR full zone transfer permitted by authoritative nameserver |
+| `LH-SPF-001` | `HIGH` | Missing SPF record on domain with mail services |
+| `LH-SPF-002` | `HIGH` | Multiple SPF records published causing RFC 7208 PermError |
+| `LH-SPF-003` | `CRITICAL` | Overly permissive SPF '+all' authorization mechanism allowing spoofing |
+| `LH-SPF-005` | `HIGH` | Excessive SPF DNS lookups exceeding RFC 10-lookup evaluation limit |
+| `LH-DMC-001` | `HIGH` | Missing DMARC policy record at _dmarc.<domain> |
+| `LH-TKO-001` | `CRITICAL` | Dangling CNAME record points to unclaimed cloud provider resource |
 
 ---
 
 ## Installation
 
-### Using uv (Recommended)
+### Using `uv` (Recommended)
 
 ```bash
+# Clone the repository
+git clone https://github.com/Logihertz-Systems-OPC-Pvt-Ltd/lh-dns-guardian.git
+cd lh-dns-guardian
+
+# Create virtual environment and install in editable mode with development tools
 uv venv
 source .venv/bin/activate
 uv pip install -e ".[dev]"
 ```
 
-### Using standard pip
+### Using standard `pip`
 
 ```bash
-pip install -e ".[dev]"
+pip install -e .
 ```
 
 ---
 
 ## CLI Usage
 
-The command-line interface entry point is `lh-dns`.
+The primary executable entrypoint is `lh-dns` (also accessible via `lh-dns`).
 
 ```bash
-lh-dns --help
-```
+# Audit a live domain's DNS security posture
+lh-dns audit-domain example.com
 
-### 1. Audit Live Domain
+# Audit a local BIND zone file
+lh-dns audit-zone /etc/bind/zones/db.example.com --format json
 
-Audit an active domain name resolution posture against default or specified nameservers:
+# Scan a list of subdomains for takeover vectors
+lh-dns check-takeover subdomains.txt --format sarif --output takeover.sarif
 
-```bash
-# Terminal table output
-lh-dns audit-domain example.com --nameserver 8.8.8.8
-
-# Structured JSON export
-lh-dns audit-domain example.com --format json --output report.json
-
-# OASIS SARIF v2.1.0 export
-lh-dns audit-domain example.com --format sarif --output report.sarif
-```
-
-### 2. Audit BIND Zone File
-
-Perform an offline audit of a BIND master zone file:
-
-```bash
-# Terminal table output
-lh-dns audit-zone /etc/bind/zones/example.com.zone
-
-# JSON report output
-lh-dns audit-zone /etc/bind/zones/example.com.zone --format json --output zone-report.json
-```
-
-### 3. Scan Subdomains for Takeover Risks
-
-Scan a list of subdomains for dangling CNAME and NS records:
-
-```bash
-# Scan subdomains listed in a text file (one per line)
-lh-dns check-takeover subdomains.txt --nameserver 8.8.8.8 --format table
-
-# Export findings to SARIF for security pipelines
-lh-dns check-takeover subdomains.txt --format sarif --output takeover-findings.sarif
+# Specify custom nameservers for audit
+lh-dns audit-domain example.com --nameserver 1.1.1.1
 ```
 
 ---
 
-## Rule Reference
+## Exit Codes
 
-| Rule ID | Severity | Category | Description |
-| :--- | :--- | :--- | :--- |
-| **LH-SEC-001** | `HIGH` | DNSSEC | DNSSEC is not enabled (missing DNSKEY, DS, RRSIG). |
-| **LH-SEC-002** | `MEDIUM` | DNSSEC | Incomplete DNSSEC (keys present without DS or RRSIG). |
-| **LH-SEC-003** | `INFO` | DNSSEC | DNSSEC active and valid. |
-| **LH-CAA-001** | `MEDIUM` | CAA | Missing CAA records (any public CA may issue certs). |
-| **LH-CAA-002** | `INFO` | CAA | CAA policy configured with authorized CAs. |
-| **LH-AXFR-001** | `CRITICAL` | Zone Transfer | Open AXFR zone transfer permitted by nameserver. |
-| **LH-AXFR-002** | `INFO` | Zone Transfer | Zone transfers properly restricted. |
-| **LH-SPF-001** | `HIGH` | SPF | Missing SPF record. |
-| **LH-SPF-002** | `HIGH` | SPF | Multiple SPF records published (PermError). |
-| **LH-SPF-003** | `CRITICAL` | SPF | Overly permissive `+all` mechanism. |
-| **LH-SPF-004** | `MEDIUM` | SPF | Permissive neutral `?all` mechanism. |
-| **LH-SPF-005** | `HIGH` | SPF | Excessive DNS lookups (>10 lookups limit). |
-| **LH-SPF-006** | `MEDIUM` | SPF | Deprecated `ptr` mechanism in SPF. |
-| **LH-SPF-007** | `INFO` | SPF | Strict `-all` policy enforced. |
-| **LH-SPF-008** | `LOW` | SPF | SoftFail `~all` policy configured. |
-| **LH-DMC-001** | `HIGH` | DMARC | Missing DMARC record at `_dmarc.<domain>`. |
-| **LH-DMC-002** | `MEDIUM` | DMARC | Un-enforced DMARC policy (`p=none`). |
-| **LH-DMC-003** | `LOW` | DMARC | Un-enforced subdomain policy (`sp=none`). |
-| **LH-DMC-004** | `LOW` | DMARC | Partial DMARC enforcement percentage (`pct < 100`). |
-| **LH-DMC-005** | `LOW` | DMARC | Missing aggregate reporting URI (`rua`). |
-| **LH-DMC-006** | `INFO` | DMARC | DMARC policy enforced (`p=quarantine` / `p=reject`). |
-| **LH-DMC-007** | `HIGH` | DMARC | Multiple DMARC records found (PermError). |
-| **LH-TKO-001** | `CRITICAL` | Takeover | Dangling CNAME points to unclaimed cloud resource. |
-| **LH-TKO-002** | `HIGH` | Takeover | Dangling NS delegation to inactive cloud nameserver. |
-| **LH-TKO-003** | `INFO` | Takeover | Subdomain target resolved and verified. |
+| Exit Code | Meaning |
+|:---:|:---|
+| `0` | All audits and security checks passed; no policy violations detected. |
+| `1` | One or more security findings, policy violations, or compliance failures detected. |
+| `2` | Execution error (invalid arguments, missing input files, malformed syntax). |
 
 ---
+
+## Documentation
+
+Comprehensive enterprise documentation is available in the [`docs/`](docs/) directory and repository root:
+
+- **[Architecture & Design](docs/ARCHITECTURE.md)**: Zero-daemon clean-room architecture, module responsibilities, domain models, and 0–100 risk score calculation formula.
+- **[Security Rules Reference](docs/RULES.md)**: Exhaustive catalog of all 10 detection rules with threat models, severities, and remediation guides.
+- **[CLI Usage Guide](docs/USAGE.md)**: Complete command-line manual, flags, exit codes, CI/CD SARIF upload workflows, and JSON pipelines.
+- **[Test & Verification Declaration](docs/TESTING.md)**: Audited test inventory, AST security verification, SAST audit results, and per-module code coverage metrics.
+- **[Changelog](CHANGELOG.md)**: Semantic release history and detailed changelog entries.
+- **[Contributing Guidelines](CONTRIBUTING.md)**: Developer setup, coding standards, line length, typing, and PR requirements.
+- **[Security Policy](SECURITY.md)**: Vulnerability disclosure procedure, reporting email, and 48-hour response SLA.
+- **[Legal Notice & Attributions](NOTICE)**: Apache-2.0 Section 4 legal notice, trademark reservations, and third-party software attributions.
 
 ## Development & Testing
 
-Run linting, security scans, and tests with:
+Run all project linters, security audits, and test suites:
 
 ```bash
-# Linting
-ruff check .
+# Run code style and lint checks
+uv run ruff check src/ tests/
 
-# Security scanning
-bandit -r src
+# Run static application security testing (SAST)
+uv run bandit -r src/
 
-# Unit tests with coverage
-pytest --cov=lh_dns_guardian --cov-report=term-missing
+# Run unit and integration tests with coverage
+uv run pytest
 ```
 
 ---
 
 ## License
 
-This software is released under the **MIT License**. See [LICENSE](LICENSE) for details.  
-Copyright (c) 2026 Logihertz Systems OPC Pvt Ltd.
+This project is licensed under the Apache-2.0 License - see the [LICENSE](LICENSE) and [NOTICE](NOTICE) files for details.
+
+Developed with precision by **Logihertz Systems (OPC) Private Limited** (`logihertzsystems`).  
+Created, architected, and engineered by **Sameer Tawade** (Creator, Founder, Director & Whole and Sole Developer — `ops@logihertz.com`).

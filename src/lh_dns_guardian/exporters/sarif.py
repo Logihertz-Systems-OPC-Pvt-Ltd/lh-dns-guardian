@@ -1,3 +1,13 @@
+# ==============================================================================
+# Product:       lh-dns-guardian (lh-dns)
+# Module:        src.lh_dns_guardian.exporters.sarif
+# Role:          Core Security Engine Component
+# Organization:  Logihertz Systems (OPC) Private Limited (logihertzsystems)
+# Creator:       Sameer Tawade (Creator, Founder, Director & Whole and Sole Developer)
+# Contact:       ops@logihertz.com | https://logihertz.com/
+# License:       Apache License 2.0 (SPDX-License-Identifier: Apache-2.0)
+# ==============================================================================
+
 """OASIS SARIF v2.1.0 finding exporter."""
 
 from __future__ import annotations
@@ -9,7 +19,9 @@ from typing import Any, Dict, List, Optional
 from lh_dns_guardian.exporters.base import BaseExporter
 from lh_dns_guardian.models import AuditReport
 
-SARIF_SCHEMA_V2_1_0 = "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json"
+SARIF_SCHEMA_V2_1_0 = (
+    "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json"
+)
 
 
 class SarifExporter(BaseExporter):
@@ -77,7 +89,7 @@ class SarifExporter(BaseExporter):
                             "name": "lh-dns-guardian",
                             "organization": "Logihertz Systems OPC Pvt Ltd",
                             "version": "0.1.0",
-                            "informationUri": "https://github.com/logihertz/lh-dns-guardian",
+                            "informationUri": "https://github.com/Logihertz-Systems-OPC-Pvt-Ltd/lh-dns-guardian",
                             "rules": list(rules_map.values()),
                         },
                     },
@@ -101,4 +113,3 @@ class SarifExporter(BaseExporter):
                 f.write(json_str)
 
         return json_str
-

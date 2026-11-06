@@ -1,3 +1,13 @@
+# ==============================================================================
+# Product:       lh-dns-guardian (lh-dns)
+# Module:        src.lh_dns_guardian.cli
+# Role:          CLI Interface & Execution Controller
+# Organization:  Logihertz Systems (OPC) Private Limited (logihertzsystems)
+# Creator:       Sameer Tawade (Creator, Founder, Director & Whole and Sole Developer)
+# Contact:       ops@logihertz.com | https://logihertz.com/
+# License:       Apache License 2.0 (SPDX-License-Identifier: Apache-2.0)
+# ==============================================================================
+
 """Command Line Interface for lh-dns-guardian."""
 
 from __future__ import annotations
@@ -15,6 +25,11 @@ from lh_dns_guardian.exporters.json_exporter import JsonExporter
 from lh_dns_guardian.exporters.sarif import SarifExporter
 from lh_dns_guardian.exporters.table import TableExporter
 from lh_dns_guardian.models import AuditReport
+
+# --- Exit Code Semantics ---
+# Exit Code 0: Audit passed successfully with zero policy violations.
+# Exit Code 1: Security findings detected meeting or exceeding failure threshold (--fail-on).
+# Exit Code 2: Command execution error, invalid arguments, or unparseable input target.
 
 app = typer.Typer(
     name="lh-dns",
@@ -193,9 +208,7 @@ def check_takeover_cmd(
     try:
         with open(subdomains_file, "r", encoding="utf-8") as f:
             subdomains = [
-                line.strip()
-                for line in f
-                if line.strip() and not line.strip().startswith("#")
+                line.strip() for line in f if line.strip() and not line.strip().startswith("#")
             ]
     except Exception as exc:
         console.print(

@@ -1,3 +1,13 @@
+# ==============================================================================
+# Product:       lh-dns-guardian (lh-dns)
+# Module:        tests.test_spf
+# Role:          Test Suite & Rule Verification
+# Organization:  Logihertz Systems (OPC) Private Limited (logihertzsystems)
+# Creator:       Sameer Tawade (Creator, Founder, Director & Whole and Sole Developer)
+# Contact:       ops@logihertz.com | https://logihertz.com/
+# License:       Apache License 2.0 (SPDX-License-Identifier: Apache-2.0)
+# ==============================================================================
+
 """Unit tests for Sender Policy Framework (SPF) rules and lookup chain counter."""
 
 from __future__ import annotations
@@ -76,15 +86,9 @@ def test_spf_excessive_lookups_direct() -> None:
 def test_spf_excessive_lookups_recursive() -> None:
     """Test recursive lookup traversal through include: chains."""
     mock_dns: Dict[str, List[str]] = {
-        "example.com": [
-            "v=spf1 include:inc1.example.com include:inc2.example.com -all"
-        ],
-        "inc1.example.com": [
-            "v=spf1 a mx include:sub1.example.com include:sub2.example.com -all"
-        ],
-        "inc2.example.com": [
-            "v=spf1 a mx include:sub3.example.com include:sub4.example.com -all"
-        ],
+        "example.com": ["v=spf1 include:inc1.example.com include:inc2.example.com -all"],
+        "inc1.example.com": ["v=spf1 a mx include:sub1.example.com include:sub2.example.com -all"],
+        "inc2.example.com": ["v=spf1 a mx include:sub3.example.com include:sub4.example.com -all"],
         "sub1.example.com": ["v=spf1 a mx -all"],
         "sub2.example.com": ["v=spf1 a mx -all"],
         "sub3.example.com": ["v=spf1 a mx -all"],
@@ -115,4 +119,3 @@ def test_spf_redirect_modifier() -> None:
         resolve_fn=lambda d: mock_records.get(d, []),
     )
     assert any(f.id == "LH-SPF-007" for f in findings)
-

@@ -1,3 +1,13 @@
+# ==============================================================================
+# Product:       lh-dns-guardian (lh-dns)
+# Module:        tests.test_models
+# Role:          Test Suite & Rule Verification
+# Organization:  Logihertz Systems (OPC) Private Limited (logihertzsystems)
+# Creator:       Sameer Tawade (Creator, Founder, Director & Whole and Sole Developer)
+# Contact:       ops@logihertz.com | https://logihertz.com/
+# License:       Apache License 2.0 (SPDX-License-Identifier: Apache-2.0)
+# ==============================================================================
+
 """Unit tests for models and data structures."""
 
 from __future__ import annotations
@@ -87,4 +97,3 @@ def test_audit_report_methods() -> None:
     assert report_dict["target"] == "example.com"
     assert report_dict["total_findings"] == 2
     assert len(report_dict["findings"]) == 2
-

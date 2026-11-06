@@ -1,3 +1,13 @@
+# ==============================================================================
+# Product:       lh-dns-guardian (lh-dns)
+# Module:        tests.test_exporters
+# Role:          Test Suite & Rule Verification
+# Organization:  Logihertz Systems (OPC) Private Limited (logihertzsystems)
+# Creator:       Sameer Tawade (Creator, Founder, Director & Whole and Sole Developer)
+# Contact:       ops@logihertz.com | https://logihertz.com/
+# License:       Apache License 2.0 (SPDX-License-Identifier: Apache-2.0)
+# ==============================================================================
+
 """Unit tests for Table, JSON, and OASIS SARIF exporters."""
 
 from __future__ import annotations
@@ -121,10 +131,9 @@ def test_sarif_exporter(tmp_path: Path) -> None:
     results_by_id = {r["ruleId"]: r for r in run["results"]}
     assert results_by_id["LH-SPF-003"]["level"] == "error"  # CRITICAL -> error
     assert results_by_id["LH-SEC-001"]["level"] == "error"  # HIGH -> error
-    assert results_by_id["LH-CAA-002"]["level"] == "note"   # INFO -> note
+    assert results_by_id["LH-CAA-002"]["level"] == "note"  # INFO -> note
 
     # File export
     out_file = tmp_path / "report.sarif"
     exporter.export(report, output_file=str(out_file))
     assert out_file.exists()
-

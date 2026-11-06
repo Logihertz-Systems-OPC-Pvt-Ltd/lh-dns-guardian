@@ -1,3 +1,13 @@
+# ==============================================================================
+# Product:       lh-dns-guardian (lh-dns)
+# Module:        src.lh_dns_guardian.rules.__init__
+# Role:          Package Initialization & Public API Declarations
+# Organization:  Logihertz Systems (OPC) Private Limited (logihertzsystems)
+# Creator:       Sameer Tawade (Creator, Founder, Director & Whole and Sole Developer)
+# Contact:       ops@logihertz.com | https://logihertz.com/
+# License:       Apache License 2.0 (SPDX-License-Identifier: Apache-2.0)
+# ==============================================================================
+
 """DNS security policy rules and validation engines."""
 
 from lh_dns_guardian.rules.axfr import audit_axfr
@@ -16,4 +26,3 @@ __all__ = [
     "audit_cname_takeover",
     "audit_ns_takeover",
 ]
-

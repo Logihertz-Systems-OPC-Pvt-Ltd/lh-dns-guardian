@@ -1,3 +1,13 @@
+# ==============================================================================
+# Product:       lh-dns-guardian (lh-dns)
+# Module:        tests.test_auditor
+# Role:          Test Suite & Rule Verification
+# Organization:  Logihertz Systems (OPC) Private Limited (logihertzsystems)
+# Creator:       Sameer Tawade (Creator, Founder, Director & Whole and Sole Developer)
+# Contact:       ops@logihertz.com | https://logihertz.com/
+# License:       Apache License 2.0 (SPDX-License-Identifier: Apache-2.0)
+# ==============================================================================
+
 """Unit tests for DomainAuditor orchestrator."""
 
 from __future__ import annotations
@@ -48,18 +58,15 @@ def test_audit_domain_mocked() -> None:
     )
     # Should detect missing CAA
     assert any(
-        f.category == FindingCategory.CAA and f.severity == Severity.MEDIUM
-        for f in report.findings
+        f.category == FindingCategory.CAA and f.severity == Severity.MEDIUM for f in report.findings
     )
     # Should detect strict SPF
     assert any(
-        f.category == FindingCategory.SPF and f.severity == Severity.INFO
-        for f in report.findings
+        f.category == FindingCategory.SPF and f.severity == Severity.INFO for f in report.findings
     )
     # Should detect enforced DMARC
     assert any(
-        f.category == FindingCategory.DMARC and f.severity == Severity.INFO
-        for f in report.findings
+        f.category == FindingCategory.DMARC and f.severity == Severity.INFO for f in report.findings
     )
 
 
@@ -136,4 +143,3 @@ def test_check_takeover_with_http_checker() -> None:
 
     report = auditor.check_takeover(["app.example.com"], http_checker=mock_http)
     assert any(f.id == "LH-TKO-001" and f.severity == Severity.CRITICAL for f in report.findings)
-

@@ -1,3 +1,13 @@
+# ==============================================================================
+# Product:       lh-dns-guardian (lh-dns)
+# Module:        tests.test_cli
+# Role:          Test Suite & Rule Verification
+# Organization:  Logihertz Systems (OPC) Private Limited (logihertzsystems)
+# Creator:       Sameer Tawade (Creator, Founder, Director & Whole and Sole Developer)
+# Contact:       ops@logihertz.com | https://logihertz.com/
+# License:       Apache License 2.0 (SPDX-License-Identifier: Apache-2.0)
+# ==============================================================================
+
 """Unit tests for lh-dns CLI commands."""
 
 from __future__ import annotations
@@ -127,4 +137,3 @@ def test_cli_sarif_stdout_and_errors(tmp_path: Path) -> None:
     # Error reading nonexistent file in check-takeover
     res_nosub = runner.invoke(app, ["check-takeover", str(tmp_path / "missing.txt")])
     assert res_nosub.exit_code != 0
-

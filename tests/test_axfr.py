@@ -1,3 +1,13 @@
+# ==============================================================================
+# Product:       lh-dns-guardian (lh-dns)
+# Module:        tests.test_axfr
+# Role:          Test Suite & Rule Verification
+# Organization:  Logihertz Systems (OPC) Private Limited (logihertzsystems)
+# Creator:       Sameer Tawade (Creator, Founder, Director & Whole and Sole Developer)
+# Contact:       ops@logihertz.com | https://logihertz.com/
+# License:       Apache License 2.0 (SPDX-License-Identifier: Apache-2.0)
+# ==============================================================================
+
 """Unit tests for AXFR zone transfer vulnerability detection."""
 
 from __future__ import annotations
@@ -27,4 +37,3 @@ def test_axfr_protected() -> None:
     assert len(findings) == 1
     assert findings[0].id == "LH-AXFR-002"
     assert findings[0].severity == Severity.INFO
-

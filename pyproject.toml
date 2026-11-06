@@ -5,12 +5,16 @@ build-backend = "hatchling.build"
 [project]
 name = "lh-dns-guardian"
 version = "0.1.0"
-description = "Domain name resolution and DNS security posture validator by Logihertz Systems OPC Pvt Ltd"
+description = "Validates BIND zone files, DNS records, DNSSEC chain integrity, SPF lookup limits, DKIM key strength, DMARC enforcement policies, CAA restrictions, and dangling CNAME subdomain takeover risks."
 readme = "README.md"
 requires-python = ">=3.11"
-license = { text = "MIT" }
+license = { text = "Apache-2.0" }
 authors = [
-    { name = "Logihertz Systems OPC Pvt Ltd" }
+    { name = "logihertzsystems", email = "ops@logihertz.com" },
+    { name = "Sameer Tawade (Creator, Founder, Director & Sole Developer)", email = "ops@logihertz.com" },
+]
+maintainers = [
+    { name = "Logihertz Systems (OPC) Private Limited", email = "ops@logihertz.com" },
 ]
 dependencies = [
     "dnspython>=2.6.0",
@@ -25,6 +29,13 @@ dev = [
     "ruff>=0.4.0",
     "bandit>=1.7.0",
 ]
+
+
+[project.urls]
+Homepage = "https://github.com/Logihertz-Systems-OPC-Pvt-Ltd/lh-dns-guardian"
+Repository = "https://github.com/Logihertz-Systems-OPC-Pvt-Ltd/lh-dns-guardian"
+Documentation = "https://github.com/Logihertz-Systems-OPC-Pvt-Ltd/lh-dns-guardian#documentation"
+Issues = "https://github.com/Logihertz-Systems-OPC-Pvt-Ltd/lh-dns-guardian/issues"
 
 [project.scripts]
 lh-dns = "lh_dns_guardian.cli:app"

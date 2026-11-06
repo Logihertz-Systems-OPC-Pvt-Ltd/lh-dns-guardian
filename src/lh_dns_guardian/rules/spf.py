@@ -1,3 +1,13 @@
+# ==============================================================================
+# Product:       lh-dns-guardian (lh-dns)
+# Module:        src.lh_dns_guardian.rules.spf
+# Role:          Core Security Engine Component
+# Organization:  Logihertz Systems (OPC) Private Limited (logihertzsystems)
+# Creator:       Sameer Tawade (Creator, Founder, Director & Whole and Sole Developer)
+# Contact:       ops@logihertz.com | https://logihertz.com/
+# License:       Apache License 2.0 (SPDX-License-Identifier: Apache-2.0)
+# ==============================================================================
+
 """Sender Policy Framework (SPF) validation rules and lookup chain counter."""
 
 from __future__ import annotations
@@ -19,9 +29,7 @@ RULE_SPF_MISSING = RuleDefinition(
     description=(
         "No SPF (Sender Policy Framework) record was found. Domain is vulnerable to email spoofing."
     ),
-    recommendation=(
-        "Publish a valid SPF record (e.g., 'v=spf1 include:_spf.example.com -all')."
-    ),
+    recommendation=("Publish a valid SPF record (e.g., 'v=spf1 include:_spf.example.com -all')."),
 )
 
 RULE_SPF_MULTIPLE = RuleDefinition(

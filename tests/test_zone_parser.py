@@ -1,3 +1,13 @@
+# ==============================================================================
+# Product:       lh-dns-guardian (lh-dns)
+# Module:        tests.test_zone_parser
+# Role:          Test Suite & Rule Verification
+# Organization:  Logihertz Systems (OPC) Private Limited (logihertzsystems)
+# Creator:       Sameer Tawade (Creator, Founder, Director & Whole and Sole Developer)
+# Contact:       ops@logihertz.com | https://logihertz.com/
+# License:       Apache License 2.0 (SPDX-License-Identifier: Apache-2.0)
+# ==============================================================================
+
 """Unit tests for BIND master zone file parser."""
 
 from __future__ import annotations
@@ -76,4 +86,3 @@ def test_parse_zone_file_not_found() -> None:
     """Test error handling when zone file does not exist."""
     with pytest.raises(FileNotFoundError):
         parse_zone_file("/nonexistent/zone.file")
-

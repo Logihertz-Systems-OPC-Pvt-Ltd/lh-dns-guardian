@@ -1,3 +1,13 @@
+# ==============================================================================
+# Product:       lh-dns-guardian (lh-dns)
+# Module:        src.lh_dns_guardian.models
+# Role:          Data Models & Rule Definitions
+# Organization:  Logihertz Systems (OPC) Private Limited (logihertzsystems)
+# Creator:       Sameer Tawade (Creator, Founder, Director & Whole and Sole Developer)
+# Contact:       ops@logihertz.com | https://logihertz.com/
+# License:       Apache License 2.0 (SPDX-License-Identifier: Apache-2.0)
+# ==============================================================================
+
 """Data models and structures for DNS security audit findings and reports."""
 
 from __future__ import annotations
@@ -9,6 +19,9 @@ from typing import Any, Dict, List, Optional
 
 
 class Severity(str, Enum):
+    # --- Severity Rank & Weighting Structure ---
+    # Defines discrete security tiers for findings and threshold gating.
+    # Higher ordinal rankings enforce stricter build break / fail-on gates.
     """Severity ratings for security findings."""
 
     CRITICAL = "CRITICAL"

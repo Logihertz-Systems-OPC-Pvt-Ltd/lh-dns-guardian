@@ -1,3 +1,13 @@
+# ==============================================================================
+# Product:       lh-dns-guardian (lh-dns)
+# Module:        src.lh_dns_guardian.zone_parser
+# Role:          Input Parser & Configuration Ingestion
+# Organization:  Logihertz Systems (OPC) Private Limited (logihertzsystems)
+# Creator:       Sameer Tawade (Creator, Founder, Director & Whole and Sole Developer)
+# Contact:       ops@logihertz.com | https://logihertz.com/
+# License:       Apache License 2.0 (SPDX-License-Identifier: Apache-2.0)
+# ==============================================================================
+
 """Parser for BIND DNS master zone files."""
 
 from __future__ import annotations
@@ -65,7 +75,9 @@ class ParsedZone:
                         )
                         self.records[full_name][rdtype].append(f'{rdata.flags} {tag} "{val}"')
                     elif rdtype in ("CNAME", "NS", "PTR", "DNAME"):
-                        self.records[full_name][rdtype].append(str(rdata.target).rstrip(".").lower())
+                        self.records[full_name][rdtype].append(
+                            str(rdata.target).rstrip(".").lower()
+                        )
                     else:
                         self.records[full_name][rdtype].append(str(rdata).rstrip("."))
 
@@ -123,6 +135,10 @@ class ParsedZone:
 
 
 def parse_zone_file(file_path: Union[str, Path], origin: Optional[str] = None) -> ParsedZone:
+    # --- Multi-Format Parsing & Normalization Engine ---
+    # Autodetects manifest formats (JSON, YAML, .conf, .env, CSV, JSONL),
+    # applies fallback decoders, recovers from malformed lines, and standardizes
+    # raw configuration attributes into typed domain model instances.
     """Parse a BIND zone file from disk.
 
     Args:

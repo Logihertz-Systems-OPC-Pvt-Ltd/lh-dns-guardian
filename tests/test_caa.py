@@ -1,3 +1,13 @@
+# ==============================================================================
+# Product:       lh-dns-guardian (lh-dns)
+# Module:        tests.test_caa
+# Role:          Test Suite & Rule Verification
+# Organization:  Logihertz Systems (OPC) Private Limited (logihertzsystems)
+# Creator:       Sameer Tawade (Creator, Founder, Director & Whole and Sole Developer)
+# Contact:       ops@logihertz.com | https://logihertz.com/
+# License:       Apache License 2.0 (SPDX-License-Identifier: Apache-2.0)
+# ==============================================================================
+
 """Unit tests for Certificate Authority Authorization (CAA) audit rules."""
 
 from __future__ import annotations
@@ -23,4 +33,3 @@ def test_caa_configured() -> None:
     assert findings[0].id == "LH-CAA-002"
     assert findings[0].severity == Severity.INFO
     assert "letsencrypt.org" in (findings[0].evidence or "")
-

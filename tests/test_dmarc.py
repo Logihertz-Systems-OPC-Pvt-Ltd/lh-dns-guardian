@@ -1,3 +1,13 @@
+# ==============================================================================
+# Product:       lh-dns-guardian (lh-dns)
+# Module:        tests.test_dmarc
+# Role:          Test Suite & Rule Verification
+# Organization:  Logihertz Systems (OPC) Private Limited (logihertzsystems)
+# Creator:       Sameer Tawade (Creator, Founder, Director & Whole and Sole Developer)
+# Contact:       ops@logihertz.com | https://logihertz.com/
+# License:       Apache License 2.0 (SPDX-License-Identifier: Apache-2.0)
+# ==============================================================================
+
 """Unit tests for DMARC validation rules."""
 
 from __future__ import annotations
@@ -57,4 +67,3 @@ def test_dmarc_missing_rua() -> None:
     txts = ["v=DMARC1; p=reject"]
     findings = audit_dmarc("example.com", txt_records=txts)
     assert any(f.id == "LH-DMC-005" and f.severity == Severity.LOW for f in findings)
-

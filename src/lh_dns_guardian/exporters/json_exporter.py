@@ -1,3 +1,13 @@
+# ==============================================================================
+# Product:       lh-dns-guardian (lh-dns)
+# Module:        src.lh_dns_guardian.exporters.json_exporter
+# Role:          SARIF, JSON & Rich Terminal Table Exporters
+# Organization:  Logihertz Systems (OPC) Private Limited (logihertzsystems)
+# Creator:       Sameer Tawade (Creator, Founder, Director & Whole and Sole Developer)
+# Contact:       ops@logihertz.com | https://logihertz.com/
+# License:       Apache License 2.0 (SPDX-License-Identifier: Apache-2.0)
+# ==============================================================================
+
 """JSON finding exporter."""
 
 from __future__ import annotations
@@ -28,4 +38,3 @@ class JsonExporter(BaseExporter):
                 f.write(json_str)
 
         return json_str
-
