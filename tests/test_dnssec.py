@@ -40,4 +40,3 @@ def test_dnssec_active() -> None:
     assert len(findings) == 1
     assert findings[0].id == "LH-SEC-003"
     assert findings[0].severity == Severity.INFO
-

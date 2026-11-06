@@ -65,7 +65,9 @@ class ParsedZone:
                         )
                         self.records[full_name][rdtype].append(f'{rdata.flags} {tag} "{val}"')
                     elif rdtype in ("CNAME", "NS", "PTR", "DNAME"):
-                        self.records[full_name][rdtype].append(str(rdata.target).rstrip(".").lower())
+                        self.records[full_name][rdtype].append(
+                            str(rdata.target).rstrip(".").lower()
+                        )
                     else:
                         self.records[full_name][rdtype].append(str(rdata).rstrip("."))
 

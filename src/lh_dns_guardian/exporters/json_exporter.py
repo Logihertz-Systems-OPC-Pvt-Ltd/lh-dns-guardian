@@ -28,4 +28,3 @@ class JsonExporter(BaseExporter):
                 f.write(json_str)
 
         return json_str
-

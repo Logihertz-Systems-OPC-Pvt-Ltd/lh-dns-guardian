@@ -9,7 +9,9 @@ from typing import Any, Dict, List, Optional
 from lh_dns_guardian.exporters.base import BaseExporter
 from lh_dns_guardian.models import AuditReport
 
-SARIF_SCHEMA_V2_1_0 = "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json"
+SARIF_SCHEMA_V2_1_0 = (
+    "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json"
+)
 
 
 class SarifExporter(BaseExporter):
@@ -101,4 +103,3 @@ class SarifExporter(BaseExporter):
                 f.write(json_str)
 
         return json_str
-

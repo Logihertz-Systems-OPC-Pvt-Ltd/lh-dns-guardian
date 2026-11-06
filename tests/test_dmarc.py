@@ -57,4 +57,3 @@ def test_dmarc_missing_rua() -> None:
     txts = ["v=DMARC1; p=reject"]
     findings = audit_dmarc("example.com", txt_records=txts)
     assert any(f.id == "LH-DMC-005" and f.severity == Severity.LOW for f in findings)
-

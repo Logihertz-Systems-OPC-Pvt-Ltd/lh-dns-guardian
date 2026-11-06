@@ -76,4 +76,3 @@ def test_parse_zone_file_not_found() -> None:
     """Test error handling when zone file does not exist."""
     with pytest.raises(FileNotFoundError):
         parse_zone_file("/nonexistent/zone.file")
-

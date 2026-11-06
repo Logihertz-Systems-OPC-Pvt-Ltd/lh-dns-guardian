@@ -106,4 +106,3 @@ def audit_dnssec(
         )
 
     return findings
-

@@ -23,4 +23,3 @@ def test_caa_configured() -> None:
     assert findings[0].id == "LH-CAA-002"
     assert findings[0].severity == Severity.INFO
     assert "letsencrypt.org" in (findings[0].evidence or "")
-

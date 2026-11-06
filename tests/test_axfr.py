@@ -27,4 +27,3 @@ def test_axfr_protected() -> None:
     assert len(findings) == 1
     assert findings[0].id == "LH-AXFR-002"
     assert findings[0].severity == Severity.INFO
-

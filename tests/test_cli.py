@@ -127,4 +127,3 @@ def test_cli_sarif_stdout_and_errors(tmp_path: Path) -> None:
     # Error reading nonexistent file in check-takeover
     res_nosub = runner.invoke(app, ["check-takeover", str(tmp_path / "missing.txt")])
     assert res_nosub.exit_code != 0
-

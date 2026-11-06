@@ -37,4 +37,3 @@ class RuleDefinition:
             recommendation=recommendation_override or self.recommendation,
             evidence=evidence,
         )
-

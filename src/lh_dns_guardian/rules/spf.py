@@ -19,9 +19,7 @@ RULE_SPF_MISSING = RuleDefinition(
     description=(
         "No SPF (Sender Policy Framework) record was found. Domain is vulnerable to email spoofing."
     ),
-    recommendation=(
-        "Publish a valid SPF record (e.g., 'v=spf1 include:_spf.example.com -all')."
-    ),
+    recommendation=("Publish a valid SPF record (e.g., 'v=spf1 include:_spf.example.com -all')."),
 )
 
 RULE_SPF_MULTIPLE = RuleDefinition(

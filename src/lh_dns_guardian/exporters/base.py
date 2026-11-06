@@ -23,4 +23,3 @@ class BaseExporter(ABC):
             The exported report string.
         """
         pass
-

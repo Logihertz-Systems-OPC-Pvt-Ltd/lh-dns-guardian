@@ -16,4 +16,3 @@ __all__ = [
     "audit_cname_takeover",
     "audit_ns_takeover",
 ]
-

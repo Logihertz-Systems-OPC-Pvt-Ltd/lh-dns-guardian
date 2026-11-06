@@ -87,4 +87,3 @@ def test_audit_report_methods() -> None:
     assert report_dict["target"] == "example.com"
     assert report_dict["total_findings"] == 2
     assert len(report_dict["findings"]) == 2
-

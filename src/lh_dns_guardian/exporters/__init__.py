@@ -6,4 +6,3 @@ from lh_dns_guardian.exporters.sarif import SarifExporter
 from lh_dns_guardian.exporters.table import TableExporter
 
 __all__ = ["BaseExporter", "TableExporter", "JsonExporter", "SarifExporter"]
-
