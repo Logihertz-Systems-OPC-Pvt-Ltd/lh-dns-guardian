@@ -1,0 +1,9 @@
+Package: lh-dns-guardian
+Version: 0.1.0
+Section: utils
+Priority: optional
+Architecture: all
+Maintainer: Sameer Tawade <ops@logihertz.com>
+Homepage: https://www.logihertz.com
+Description: lh-dns - DNSSEC Trust Chain & SPF Evaluation Bound Invariant
+ Deterministic DNS infrastructure and domain security auditor validating DNSSEC chain of trust, SPF lookup bounds, DKIM RSA key strength, DMARC enforcement, CAA records, and AXFR zone transfer locks.
